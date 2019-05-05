@@ -9,10 +9,7 @@ export default class Event<T> {
   private event: IEvent<T>;
 
   constructor() {
-    this.event = {
-      stack: [],
-      index: 0
-    };
+    this.event = { stack: [], index: 0 };
   }
 
   excute(data?: T) {
@@ -34,6 +31,10 @@ export default class Event<T> {
     return { unSubscribe };
   }
 
+  allUnsubscribe() {
+    this.event = { stack: [], index: 0 };
+  }
+
   once(func: EventFunc<T>) {
     const off = this.subscribe(data => {
       off.unSubscribe();
@@ -42,11 +43,11 @@ export default class Event<T> {
   }
 
   asPromise = (timelimit?: number) =>
-    new Promise<T>((resolve, reject) => {
+    new Promise<T | undefined>((resolve, reject) => {
       const timeout =
         timelimit &&
         setTimeout(() => {
-          reject();
+          reject("Event asPromise timeout");
         }, timelimit);
       this.once(data => {
         if (timeout) clearTimeout(timeout);
