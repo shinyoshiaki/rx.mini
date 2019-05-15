@@ -2,7 +2,7 @@ declare type EventFunc<T> = (data: T) => void;
 export default class Event<T> {
     private event;
     constructor();
-    excute(data?: T): void;
+    execute(data?: T): void;
     subscribe(func: EventFunc<T>): {
         unSubscribe: () => void;
     };

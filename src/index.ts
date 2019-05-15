@@ -12,7 +12,7 @@ export default class Event<T> {
     this.event = { stack: [], index: 0 };
   }
 
-  excute(data?: T) {
+  execute(data?: T) {
     for (let item of this.event.stack) {
       if (data) item.func(data);
       else item.func(undefined as any);

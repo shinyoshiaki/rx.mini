@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
+    "deploy":"npm run test && rm -rf ./lib && npm run build",
     "publish": "npm publish --access=public"
   },
   "devDependencies": {
