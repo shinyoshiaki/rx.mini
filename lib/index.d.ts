@@ -1,13 +1,4 @@
-declare type EventFunc<T> = (data: T) => void;
-export default class Event<T> {
-    private event;
-    constructor();
-    execute(data?: T): void;
-    subscribe(func: EventFunc<T>): {
-        unSubscribe: () => void;
-    };
-    allUnsubscribe(): void;
-    once(func: EventFunc<T>): void;
-    asPromise: (timelimit?: number | undefined) => Promise<T>;
-}
-export {};
+import Event from "./core";
+import Pack from "./pack";
+export default Event;
+export { Pack };
