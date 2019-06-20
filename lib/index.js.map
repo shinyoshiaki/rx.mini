@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":";;;AAAA,wDAA2B;AAC3B,wDAA0B;AAIjB,eAJF,cAAI,CAIE;AAFb,kBAAe,cAAK,CAAC","sourcesContent":["import Event from \"./core\";\nimport Pack from \"./pack\";\n\nexport default Event;\n\nexport { Pack };\n"]}
