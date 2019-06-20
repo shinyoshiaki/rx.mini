@@ -1,4 +1,4 @@
-import Event from "../core";
+import Event from "../../core";
 
 export default function Pack() {
   let events: Event<any>[] = [];

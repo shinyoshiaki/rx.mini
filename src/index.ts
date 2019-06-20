@@ -1,5 +1,5 @@
 import Event from "./core";
-import Pack from "./pack";
+import Pack from "./extensions/pack";
 
 export default Event;
 

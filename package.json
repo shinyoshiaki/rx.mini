@@ -1,6 +1,6 @@
 {
   "name": "rx.mini",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "main": "lib/index.js",
   "files": [
     "lib",
@@ -9,10 +9,10 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "type":"tsc --noEmit",
-    "update":"rm -rf ./lib && npm run build",
+    "type": "tsc --noEmit",
+    "update": "rm -rf ./lib && npm run build",
     "test": "jest",
-    "deploy":"npm run type && npm run test && npm run update",
+    "deploy": "npm run type && npm run test && npm run update",
     "publish": "npm publish --access=public"
   },
   "devDependencies": {
