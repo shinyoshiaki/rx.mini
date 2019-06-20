@@ -1,9 +1,9 @@
 type EventFunc<T> = (data: T) => void;
 
-interface IEvent<T> {
+type IEvent<T> = {
   stack: { func: EventFunc<T>; id: number }[];
   index: number;
-}
+};
 
 export default class Event<T> {
   private event: IEvent<T>;
@@ -12,7 +12,7 @@ export default class Event<T> {
     this.event = { stack: [], index: 0 };
   }
 
-  execute(data?: T) {
+  execute(data: T) {
     for (let item of this.event.stack) {
       if (data) item.func(data);
       else item.func(undefined as any);
