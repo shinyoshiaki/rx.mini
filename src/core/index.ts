@@ -19,6 +19,12 @@ export default class Event<T> {
     }
   }
 
+  executeNull() {
+    for (let item of this.event.stack) {
+      item.func(undefined as any);
+    }
+  }
+
   subscribe(func: EventFunc<T>) {
     const id = this.event.index;
     this.event.stack.push({ func, id });
