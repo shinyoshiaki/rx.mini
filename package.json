@@ -39,7 +39,7 @@
       }
     },
     "testMatch": [
-      "**/*.test.ts"
+      "**/*test.ts"
     ]
   }
 }
