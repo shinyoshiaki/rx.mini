@@ -3,6 +3,7 @@ export default class Event<T> {
     private event;
     constructor();
     execute(data: T): void;
+    executeNull(): void;
     subscribe(func: EventFunc<T>): {
         unSubscribe: () => void;
     };
