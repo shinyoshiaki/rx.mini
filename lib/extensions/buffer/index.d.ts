@@ -1,5 +1,5 @@
 import Event from "../../core";
-export declare function Pool<T>(length: number, event: Event<T>): {
+export declare function Buffer<T>(length: number, event: Event<T>): {
     subscribe: (func: (data: T) => void) => {
         unSubscribe: () => void;
     };
