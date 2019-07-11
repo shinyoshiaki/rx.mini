@@ -1,8 +1,8 @@
 import Event from "./core";
 import Pack from "./extensions/pack";
 import Wait from "./extensions/wait";
-import { Pool } from "./extensions/pool";
+import { Buffer } from "./extensions/buffer";
 
 export default Event;
 
-export { Pack, Wait, Pool };
+export { Pack, Wait, Buffer };

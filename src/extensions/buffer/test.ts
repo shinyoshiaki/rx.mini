@@ -1,11 +1,12 @@
 import Event from "../../core";
-import { Pool } from ".";
+import { Buffer } from ".";
 
-test("pool", async () => {
+test("buffer", async () => {
   const event = new Event<number>();
-  const pool = Pool(3, event);
+  const pool = Buffer(3, event);
   let i = 0;
-  pool.subscribe(() => {
+  pool.subscribe(v => {
+    console.log(v);
     expect(i > 3).toBe(true);
   });
   event.execute(i++);
