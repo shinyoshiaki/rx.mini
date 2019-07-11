@@ -1,14 +1,13 @@
 declare type EventFunc<T> = (data: T) => void;
-export default class Event<T> {
+export default class Event<T = null> {
     private event;
-    constructor();
-    execute(data: T): void;
-    executeNull(): void;
-    subscribe(func: EventFunc<T>): {
+    execute: (data: T) => void;
+    executeNull: () => void;
+    subscribe: (func: EventFunc<T>) => {
         unSubscribe: () => void;
     };
-    allUnsubscribe(): void;
-    once(func: EventFunc<T>): void;
+    allUnsubscribe: () => void;
+    once: (func: EventFunc<T>) => void;
     asPromise: (timelimit?: number | undefined) => Promise<T>;
 }
 export {};
