@@ -1,7 +1,14 @@
-type EventFunc<T> = (data: T) => void;
+type EventExecute<T> = (data: T) => void;
+type EventComplete = () => void;
+type EventError = (e: any) => void;
 
 type IEvent<T> = {
-  stack: { func: EventFunc<T>; id: number }[];
+  stack: {
+    execute: EventExecute<T>;
+    complete?: EventComplete;
+    error?: EventError;
+    id: number;
+  }[];
   index: number;
 };
 
@@ -10,19 +17,35 @@ export default class Event<T = null> {
 
   execute = (data: T) => {
     for (let item of this.event.stack) {
-      item.func(data);
+      item.execute(data);
     }
   };
 
-  executeNull = () => {
+  complete = () => {
     for (let item of this.event.stack) {
-      item.func(undefined as any);
+      if (item.complete) item.complete();
     }
+    this.allUnsubscribe();
   };
 
-  subscribe = (func: EventFunc<T>) => {
+  error = (e: any) => {
+    for (let item of this.event.stack) {
+      if (item.error) item.error(e);
+    }
+    this.allUnsubscribe();
+  };
+
+  allUnsubscribe = () => {
+    this.event = { stack: [], index: 0 };
+  };
+
+  subscribe = (
+    execute: EventExecute<T>,
+    complete?: EventComplete,
+    error?: EventError
+  ) => {
     const id = this.event.index;
-    this.event.stack.push({ func, id });
+    this.event.stack.push({ execute, id, complete, error });
     this.event.index++;
     const unSubscribe = () => {
       this.event.stack = this.event.stack.filter(
@@ -32,15 +55,19 @@ export default class Event<T = null> {
     return { unSubscribe };
   };
 
-  allUnsubscribe = () => {
-    this.event = { stack: [], index: 0 };
-  };
-
-  once = (func: EventFunc<T>) => {
-    const off = this.subscribe(data => {
-      off.unSubscribe();
-      func(data);
-    });
+  once = (
+    execute: EventExecute<T>,
+    complete?: EventComplete,
+    error?: EventError
+  ) => {
+    const off = this.subscribe(
+      data => {
+        off.unSubscribe();
+        execute(data);
+      },
+      complete,
+      error
+    );
   };
 
   asPromise = (timelimit?: number) =>
@@ -50,9 +77,34 @@ export default class Event<T = null> {
         setTimeout(() => {
           reject("Event asPromise timeout");
         }, timelimit);
-      this.once(data => {
-        if (timeout) clearTimeout(timeout);
-        resolve(data);
-      });
+
+      this.once(
+        data => {
+          if (timeout) clearTimeout(timeout);
+          resolve(data);
+        },
+        () => {
+          if (timeout) clearTimeout(timeout);
+          resolve();
+        },
+        err => {
+          if (timeout) clearTimeout(timeout);
+          reject(err);
+        }
+      );
     });
+
+  get returnTrigger() {
+    const { execute, error, complete } = this;
+    return { execute, error, complete };
+  }
+
+  get returnListener() {
+    const { subscribe, once, asPromise } = this;
+    return { subscribe, once, asPromise };
+  }
+
+  get length() {
+    return this.event.stack.length;
+  }
 }

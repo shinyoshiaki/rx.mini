@@ -6,7 +6,6 @@ test("buffer", async () => {
   const pool = Buffer(3, event);
   let i = 0;
   pool.subscribe(v => {
-    console.log(v);
     expect(i > 3).toBe(true);
   });
   event.execute(i++);

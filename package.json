@@ -11,8 +11,8 @@
     "build": "tsc",
     "type": "tsc --noEmit",
     "update": "rm -rf ./lib && npm run build",
-    "test": "jest",
-    "deploy": "npm run type && npm run test && npm run update",
+    "test": "npm run type && jest",
+    "deploy": "npm run test && npm run update",
     "publish": "npm publish --access=public"
   },
   "devDependencies": {
