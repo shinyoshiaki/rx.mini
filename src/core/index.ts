@@ -15,9 +15,9 @@ type IEvent<T> = {
 export default class Event<T = null> {
   private event: IEvent<T> = { stack: [], index: 0 };
 
-  execute = (data: T) => {
+  execute = (data?: T) => {
     for (let item of this.event.stack) {
-      item.execute(data);
+      item.execute(data!);
     }
   };
 
@@ -49,7 +49,7 @@ export default class Event<T = null> {
     this.event.index++;
     const unSubscribe = () => {
       this.event.stack = this.event.stack.filter(
-        item => item.id !== id && item
+        (item) => item.id !== id && item
       );
     };
     return { unSubscribe };
@@ -61,7 +61,7 @@ export default class Event<T = null> {
     error?: EventError
   ) => {
     const off = this.subscribe(
-      data => {
+      (data) => {
         off.unSubscribe();
         execute(data);
       },
@@ -70,16 +70,16 @@ export default class Event<T = null> {
     );
   };
 
-  asPromise = (timelimit?: number) =>
+  asPromise = (timeLimit?: number) =>
     new Promise<T>((resolve, reject) => {
       const timeout =
-        timelimit &&
+        timeLimit &&
         setTimeout(() => {
           reject("Event asPromise timeout");
-        }, timelimit);
+        }, timeLimit);
 
       this.once(
-        data => {
+        (data) => {
           if (timeout) clearTimeout(timeout);
           resolve(data);
         },
@@ -87,7 +87,7 @@ export default class Event<T = null> {
           if (timeout) clearTimeout(timeout);
           resolve();
         },
-        err => {
+        (err) => {
           if (timeout) clearTimeout(timeout);
           reject(err);
         }

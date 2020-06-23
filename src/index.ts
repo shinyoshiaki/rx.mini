@@ -5,4 +5,4 @@ import { Buffer } from "./extensions/buffer";
 
 export default Event;
 
-export { Pack, Wait, Buffer };
+export { Pack, Wait, Buffer, Event };
