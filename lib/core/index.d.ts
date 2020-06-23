@@ -3,7 +3,7 @@ declare type EventComplete = () => void;
 declare type EventError = (e: any) => void;
 export default class Event<T = null> {
     private event;
-    execute: (data: T) => void;
+    execute: (data?: T | undefined) => void;
     complete: () => void;
     error: (e: any) => void;
     allUnsubscribe: () => void;
@@ -11,19 +11,19 @@ export default class Event<T = null> {
         unSubscribe: () => void;
     };
     once: (execute: EventExecute<T>, complete?: EventComplete | undefined, error?: EventError | undefined) => void;
-    asPromise: (timelimit?: number | undefined) => Promise<T>;
-    readonly returnTrigger: {
-        execute: (data: T) => void;
+    asPromise: (timeLimit?: number | undefined) => Promise<T>;
+    get returnTrigger(): {
+        execute: (data?: T | undefined) => void;
         error: (e: any) => void;
         complete: () => void;
     };
-    readonly returnListener: {
+    get returnListener(): {
         subscribe: (execute: EventExecute<T>, complete?: EventComplete | undefined, error?: EventError | undefined) => {
             unSubscribe: () => void;
         };
         once: (execute: EventExecute<T>, complete?: EventComplete | undefined, error?: EventError | undefined) => void;
-        asPromise: (timelimit?: number | undefined) => Promise<T>;
+        asPromise: (timeLimit?: number | undefined) => Promise<T>;
     };
-    readonly length: number;
+    get length(): number;
 }
 export {};
