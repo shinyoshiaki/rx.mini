@@ -1,5 +1,5 @@
 import Event from "../../";
-export default class Wait<T> {
+export default class Wait<T extends any[]> {
     private candidates;
     constructor();
     private exist;

@@ -1,8 +1,8 @@
-type EventExecute<T> = (data: T) => void;
+type EventExecute<T extends any[]> = (...args: T) => void;
 type EventComplete = () => void;
 type EventError = (e: any) => void;
 
-type IEvent<T> = {
+type IEvent<T extends any[]> = {
   stack: {
     execute: EventExecute<T>;
     complete?: EventComplete;
@@ -12,12 +12,12 @@ type IEvent<T> = {
   index: number;
 };
 
-export default class Event<T = null> {
+export default class Event<T extends any[]> {
   private event: IEvent<T> = { stack: [], index: 0 };
 
-  execute = (data?: T) => {
+  execute = (...args: T) => {
     for (let item of this.event.stack) {
-      item.execute(data!);
+      item.execute(...args);
     }
   };
 
@@ -61,9 +61,9 @@ export default class Event<T = null> {
     error?: EventError
   ) => {
     const off = this.subscribe(
-      (data) => {
+      (...args) => {
         off.unSubscribe();
-        execute(data);
+        execute(...args);
       },
       complete,
       error
@@ -79,17 +79,17 @@ export default class Event<T = null> {
         }, timeLimit);
 
       this.once(
-        (data) => {
+        (...args) => {
           if (timeout) clearTimeout(timeout);
-          resolve(data);
+          resolve(args);
         },
         () => {
           if (timeout) clearTimeout(timeout);
-          resolve();
+          resolve([] as any);
         },
         (err) => {
           if (timeout) clearTimeout(timeout);
-          reject(err);
+          reject([err]);
         }
       );
     });

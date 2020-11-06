@@ -1,6 +1,6 @@
 {
   "name": "rx.mini",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "main": "lib/index.js",
   "files": [
     "lib",
@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "deploy": "npm run test && npm run update",
+    "deploy": "yarn update && yarn publish",
     "publish": "npm publish --access=public",
     "test": "npm run type && jest",
     "type": "tsc --noEmit",

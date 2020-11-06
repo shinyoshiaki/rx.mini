@@ -1,5 +1,5 @@
 import Event from "../../core";
 export default function Pack(): {
-    event: <T>() => Event<T>;
+    event: <T extends any[]>() => Event<T>;
     finishAll: () => void;
 };

@@ -1,6 +1,6 @@
 import Event from "../../";
 
-export default class Wait<T> {
+export default class Wait<T extends any[]> {
   private candidates: { [id: string]: Event<T> } = {};
 
   constructor() {}
@@ -21,7 +21,7 @@ export default class Wait<T> {
       this.candidates[id] = event;
 
       const result = await job();
-      event.execute(result);
+      event.execute(...result);
       this.delete(id);
 
       return { result };

@@ -1,9 +1,9 @@
-declare type EventExecute<T> = (data: T) => void;
+declare type EventExecute<T extends any[]> = (...args: T) => void;
 declare type EventComplete = () => void;
 declare type EventError = (e: any) => void;
-export default class Event<T = null> {
+export default class Event<T extends any[]> {
     private event;
-    execute: (data?: T | undefined) => void;
+    execute: (...args: T) => void;
     complete: () => void;
     error: (e: any) => void;
     allUnsubscribe: () => void;
@@ -13,7 +13,7 @@ export default class Event<T = null> {
     once: (execute: EventExecute<T>, complete?: EventComplete | undefined, error?: EventError | undefined) => void;
     asPromise: (timeLimit?: number | undefined) => Promise<T>;
     get returnTrigger(): {
-        execute: (data?: T | undefined) => void;
+        execute: (...args: T) => void;
         error: (e: any) => void;
         complete: () => void;
     };
