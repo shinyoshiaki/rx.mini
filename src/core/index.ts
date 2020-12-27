@@ -89,7 +89,7 @@ export default class Event<T extends any[]> {
         },
         (err) => {
           if (timeout) clearTimeout(timeout);
-          reject([err]);
+          reject(err);
         }
       );
     });

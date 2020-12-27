@@ -58,7 +58,7 @@ describe("event", () => {
     }
     setTimeout(() => event.error("error"), 0);
     {
-      const [res] = await event.asPromise().catch((e) => e);
+      const [res] = await event.asPromise().catch((e) => [e]);
       expect(res).toBe("error");
     }
   });
