@@ -11,6 +11,7 @@ export default class Event<T extends any[]> {
         unSubscribe: () => void;
     };
     once: (execute: EventExecute<T>, complete?: EventComplete | undefined, error?: EventError | undefined) => void;
+    watch: (cb: (...args: T) => boolean, timeLimit?: number | undefined) => Promise<T>;
     asPromise: (timeLimit?: number | undefined) => Promise<T>;
     get returnTrigger(): {
         execute: (...args: T) => void;
