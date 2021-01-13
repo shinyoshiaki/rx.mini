@@ -70,6 +70,24 @@ export default class Event<T extends any[]> {
     );
   };
 
+  watch = (cb: (...args: T) => boolean, timeLimit?: number) =>
+    new Promise<T>((resolve, reject) => {
+      const timeout =
+        timeLimit &&
+        setTimeout(() => {
+          reject("Event watch timeout");
+        }, timeLimit);
+
+      const { unSubscribe } = this.subscribe((...args) => {
+        const done = cb(...args);
+        if (done) {
+          if (timeout) clearTimeout(timeout);
+          unSubscribe();
+          resolve(args);
+        }
+      });
+    });
+
   asPromise = (timeLimit?: number) =>
     new Promise<T>((resolve, reject) => {
       const timeout =
