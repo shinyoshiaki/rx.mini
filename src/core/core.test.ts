@@ -47,6 +47,9 @@ describe("event", () => {
       const [res] = await listener.asPromise();
       expect(typeof res).toBe("undefined");
     }
+
+    expect(() => event.subscribe(() => {})).toThrowError("event completed");
+    expect(() => event.execute(0)).toThrowError("event completed");
   });
 
   test("test-error", async () => {

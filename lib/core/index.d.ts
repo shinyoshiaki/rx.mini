@@ -3,6 +3,7 @@ declare type EventComplete = () => void;
 declare type EventError = (e: any) => void;
 export default class Event<T extends any[]> {
     private event;
+    ended: boolean;
     execute: (...args: T) => void;
     complete: () => void;
     error: (e: any) => void;

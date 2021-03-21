@@ -14,21 +14,29 @@ type IEvent<T extends any[]> = {
 
 export default class Event<T extends any[]> {
   private event: IEvent<T> = { stack: [], index: 0 };
+  ended = false;
 
   execute = (...args: T) => {
+    if (this.ended) throw new Error("event completed");
+
     for (let item of this.event.stack) {
       item.execute(...args);
     }
   };
 
   complete = () => {
+    if (this.ended) throw new Error("event completed");
+
     for (let item of this.event.stack) {
       if (item.complete) item.complete();
     }
     this.allUnsubscribe();
+    this.ended = true;
   };
 
   error = (e: any) => {
+    if (this.ended) throw new Error("event completed");
+
     for (let item of this.event.stack) {
       if (item.error) item.error(e);
     }
@@ -36,6 +44,8 @@ export default class Event<T extends any[]> {
   };
 
   allUnsubscribe = () => {
+    if (this.ended) throw new Error("event completed");
+
     this.event = { stack: [], index: 0 };
   };
 
@@ -44,6 +54,8 @@ export default class Event<T extends any[]> {
     complete?: EventComplete,
     error?: EventError
   ) => {
+    if (this.ended) throw new Error("event completed");
+
     const id = this.event.index;
     this.event.stack.push({ execute, id, complete, error });
     this.event.index++;
