@@ -1,7 +1,7 @@
 declare type EventExecute<T extends any[]> = (...args: T) => void;
 declare type EventComplete = () => void;
 declare type EventError = (e: any) => void;
-export default class Event<T extends any[]> {
+export declare class Event<T extends any[]> {
     private event;
     ended: boolean;
     execute: (...args: T) => void;

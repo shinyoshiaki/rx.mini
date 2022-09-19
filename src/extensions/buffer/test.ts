@@ -1,4 +1,4 @@
-import Event from "../../core";
+import { Event } from "../../core";
 import { Buffer } from ".";
 
 test("buffer", async () => {
