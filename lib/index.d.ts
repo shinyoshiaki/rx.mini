@@ -1,6 +1,6 @@
 import Event from "./core";
-import Pack from "./extensions/pack";
-import Wait from "./extensions/wait";
-import { Buffer } from "./extensions/buffer";
 export default Event;
-export { Pack, Wait, Buffer, Event };
+export * from "./core";
+export * from "./extensions/pack";
+export * from "./extensions/wait";
+export * from "./extensions/buffer";

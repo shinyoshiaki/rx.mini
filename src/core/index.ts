@@ -59,12 +59,18 @@ export default class Event<T extends any[]> {
     const id = this.event.index;
     this.event.stack.push({ execute, id, complete, error });
     this.event.index++;
+
     const unSubscribe = () => {
       this.event.stack = this.event.stack.filter(
         (item) => item.id !== id && item
       );
     };
-    return { unSubscribe };
+
+    const disposer = (disposer: EventDisposer) => {
+      disposer.push(unSubscribe);
+    };
+
+    return { unSubscribe, disposer };
   };
 
   once = (
@@ -136,5 +142,18 @@ export default class Event<T extends any[]> {
 
   get length() {
     return this.event.stack.length;
+  }
+}
+
+export class EventDisposer {
+  private _disposer: (() => void)[] = [];
+
+  push(disposer: () => void) {
+    this._disposer.push(disposer);
+  }
+
+  dispose() {
+    this._disposer.forEach((d) => d());
+    this._disposer = [];
   }
 }
