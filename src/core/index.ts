@@ -12,7 +12,7 @@ type IEvent<T extends any[]> = {
   index: number;
 };
 
-export default class Event<T extends any[]> {
+export class Event<T extends any[]> {
   private event: IEvent<T> = { stack: [], index: 0 };
   ended = false;
 

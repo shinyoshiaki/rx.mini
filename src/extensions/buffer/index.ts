@@ -1,4 +1,4 @@
-import Event from "../../core";
+import { Event } from "../../core";
 
 export function Buffer<T extends any[]>(length: number, event: Event<T>) {
   const observable = new Event<T>();

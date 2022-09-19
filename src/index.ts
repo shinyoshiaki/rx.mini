@@ -1,5 +1,4 @@
-import Event from "./core";
-
+import { Event } from "./core";
 export default Event;
 
 export * from "./core";
