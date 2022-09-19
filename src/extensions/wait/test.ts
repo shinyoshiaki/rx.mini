@@ -3,7 +3,7 @@ import Wait from ".";
 test("wait", async () => {
   const wait = new Wait<[string]>();
   await Promise.all([
-    new Promise(async (r) => {
+    new Promise<void>(async (r) => {
       const { exist, result } = await wait.create(
         "test",
         () => new Promise<[string]>((r) => setTimeout(() => r(["solve"]), 1000))
@@ -14,7 +14,7 @@ test("wait", async () => {
         r();
       }
     }),
-    new Promise(async (r) => {
+    new Promise<void>(async (r) => {
       const { exist, result } = await wait.create(
         "test",
         () =>

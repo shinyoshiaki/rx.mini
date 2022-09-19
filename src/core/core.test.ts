@@ -47,6 +47,9 @@ describe("event", () => {
       const [res] = await listener.asPromise();
       expect(typeof res).toBe("undefined");
     }
+
+    expect(() => event.subscribe(() => {})).toThrowError("event completed");
+    expect(() => event.execute(0)).toThrowError("event completed");
   });
 
   test("test-error", async () => {
@@ -58,7 +61,7 @@ describe("event", () => {
     }
     setTimeout(() => event.error("error"), 0);
     {
-      const [res] = await event.asPromise().catch((e) => e);
+      const [res] = await event.asPromise().catch((e) => [e]);
       expect(res).toBe("error");
     }
   });
