@@ -1,7 +1,7 @@
 type EventExecute<T extends any[]> = (...args: T) => void;
+type PromiseEventExecute<T extends any[]> = (...args: T) => Promise<void>;
 type EventComplete = () => void;
 type EventError = (e: any) => void;
-
 type IEvent<T extends any[]> = {
   stack: {
     execute: EventExecute<T>;
@@ -9,19 +9,38 @@ type IEvent<T extends any[]> = {
     error?: EventError;
     id: number;
   }[];
-  index: number;
+  promiseStack: {
+    execute: PromiseEventExecute<T>;
+    complete?: EventComplete;
+    error?: EventError;
+    id: number;
+  }[];
+  eventId: number;
 };
 
 export class Event<T extends any[]> {
-  private event: IEvent<T> = { stack: [], index: 0 };
+  private event: IEvent<T> = {
+    stack: [],
+    promiseStack: [],
+    eventId: 0,
+  };
   ended = false;
+  onerror = (e: any) => {};
 
   execute = (...args: T) => {
     if (this.ended) throw new Error("event completed");
 
-    for (let item of this.event.stack) {
+    for (const item of this.event.stack) {
       item.execute(...args);
     }
+
+    (async () => {
+      for (const item of this.event.promiseStack) {
+        await item.execute(...args);
+      }
+    })().catch((e) => {
+      this.onerror(e);
+    });
   };
 
   complete = () => {
@@ -46,7 +65,11 @@ export class Event<T extends any[]> {
   allUnsubscribe = () => {
     if (this.ended) throw new Error("event completed");
 
-    this.event = { stack: [], index: 0 };
+    this.event = {
+      stack: [],
+      promiseStack: [],
+      eventId: 0,
+    };
   };
 
   subscribe = (
@@ -56,9 +79,33 @@ export class Event<T extends any[]> {
   ) => {
     if (this.ended) throw new Error("event completed");
 
-    const id = this.event.index;
+    const id = this.event.eventId;
     this.event.stack.push({ execute, id, complete, error });
-    this.event.index++;
+    this.event.eventId++;
+
+    const unSubscribe = () => {
+      this.event.stack = this.event.stack.filter(
+        (item) => item.id !== id && item
+      );
+    };
+
+    const disposer = (disposer: EventDisposer) => {
+      disposer.push(unSubscribe);
+    };
+
+    return { unSubscribe, disposer };
+  };
+
+  queuingSubscribe = (
+    execute: PromiseEventExecute<T>,
+    complete?: EventComplete,
+    error?: EventError
+  ) => {
+    if (this.ended) throw new Error("event completed");
+
+    const id = this.event.eventId;
+    this.event.promiseStack.push({ execute, id, complete, error });
+    this.event.eventId++;
 
     const unSubscribe = () => {
       this.event.stack = this.event.stack.filter(
