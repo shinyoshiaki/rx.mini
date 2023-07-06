@@ -25,6 +25,7 @@ export class Event<T extends any[]> {
     eventId: 0,
   };
   ended = false;
+  onended?: () => void;
   onerror = (e: any) => {};
 
   execute = (...args: T) => {
@@ -51,6 +52,10 @@ export class Event<T extends any[]> {
     }
     this.allUnsubscribe();
     this.ended = true;
+    if (this.onended) {
+      this.onended();
+      this.onended = undefined;
+    }
   };
 
   error = (e: any) => {
